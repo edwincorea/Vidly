@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Vidly.Models;
 using Vidly.ViewModels;
@@ -13,8 +14,8 @@ namespace Vidly.Controllers
             var movie = new Movie() { Name = "Shrek!" };
             var customers = new List<Customer>
             {
-                new Customer { Name = "Customer 1" },
-                new Customer { Name = "Customer 2" }
+                new Customer { Name = "John Smith" },
+                new Customer { Name = "Mary Williams" }
             };
 
             var viewModel = new RandomMovieViewModel
@@ -33,15 +34,11 @@ namespace Vidly.Controllers
         }
 
         // GET: Movies/
-        public ActionResult Index(int? pageIndex, string sortBy)
+        public ViewResult Index()
         {
-            if (!pageIndex.HasValue)
-                pageIndex = 1;
+            var movies = GetMovies();
 
-            if (string.IsNullOrEmpty(sortBy))
-                sortBy = "Name";
-
-            return Content(string.Format("pageIndex={0}&sortBy={1}", pageIndex, sortBy));
+            return View(movies);
         }
 
         [Route("movies/release/{year}/{month:regex(\\d{2}):range(1, 12)}")]
@@ -49,5 +46,29 @@ namespace Vidly.Controllers
         {
             return Content(year + "/" + month);
         }
+
+        // GET: Movie
+        public ActionResult Details(int id)
+        {
+            var movie = GetMovies().SingleOrDefault(c => c.Id == id);
+
+            if (movie == null)
+                return HttpNotFound();
+
+            return View(movie);
+        }
+
+        #region "private methods"
+
+        private List<Movie> GetMovies()
+        {
+            return new List<Movie>
+            {
+                new Movie { Id = 1, Name = "Shrek" },
+                new Movie { Id = 2, Name = "Wall-e" }
+            };
+        }
+
+        #endregion
     }
 }
