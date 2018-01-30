@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using Vidly.Models;
@@ -22,9 +22,11 @@ namespace Vidly.Controllers
         // GET: Customers
         public ViewResult Index()
         {
-            // deferred vs inmediate query execution
+            // deferred vs inmediate query execution: .ToList()
             // http://www.dotnetcurry.com/linq/750/deferred-vs-immediate-query-execution-linq
-            var customers = _context.Customers.ToList();
+
+            // Eager loading: .Include()
+            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
 
             return View(customers);
         }
