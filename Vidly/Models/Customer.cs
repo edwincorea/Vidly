@@ -12,6 +12,7 @@ namespace Vidly.Models
         public string Name { get; set; }
 
         [Display(Name = "Date of Birth")]
+        [Min18YearsIfAMember]
         public DateTime? Birthdate { get; set; }
 
         public bool IsSubscribedToNewsletter { get; set; }
@@ -20,7 +21,7 @@ namespace Vidly.Models
         public MembershipType MembershipType { get; set; }
 
         // For optimizations, we declare a foreign key. By convention: ClassName+Id
-        [Display(Name = "Membership Type")]
+        [Display(Name = "Membership Type")]        
         public byte MembershipTypeId { get; set; } 
     }
 }
