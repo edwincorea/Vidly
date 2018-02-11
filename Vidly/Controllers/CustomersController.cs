@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Mvc;
 using Vidly.Models;
@@ -34,7 +35,7 @@ namespace Vidly.Controllers
 
         public ActionResult New()
         {
-            var membershipTypes = _context.MembershipTypes.ToList();
+            var membershipTypes = GetMembershipTypes();
             var viewModel = new CustomerFormViewModel()
             {
                 MembershipTypes = membershipTypes
@@ -50,8 +51,7 @@ namespace Vidly.Controllers
             if (customer == null)
                 return HttpNotFound();
 
-            var membershipTypes = _context.MembershipTypes.ToList();
-
+            var membershipTypes = GetMembershipTypes();
             var viewModel = new CustomerFormViewModel()
             {
                 Customer = customer,
@@ -75,6 +75,18 @@ namespace Vidly.Controllers
         [HttpPost]
         public ActionResult Save(Customer customer)
         {
+            if (!ModelState.IsValid)
+            {
+                var membershipTypes = GetMembershipTypes();
+                var viewModel = new CustomerFormViewModel
+                {
+                    Customer = customer,
+                    MembershipTypes = membershipTypes
+                };
+
+                return View("CustomerForm", viewModel);
+            }
+
             if (customer.Id == 0)
                 _context.Customers.Add(customer);
             else
@@ -91,5 +103,14 @@ namespace Vidly.Controllers
 
             return RedirectToAction("Index", "Customers");
         }
+
+        #region Private Methods
+
+        private IList<MembershipType> GetMembershipTypes()
+        {
+            return _context.MembershipTypes.ToList();
+        }            
+
+        #endregion
     }
 }
