@@ -20,6 +20,18 @@ namespace Vidly.Controllers
             _context.Dispose();
         }
 
+        // GET: Customers
+        public ViewResult Index()
+        {
+            // deferred vs inmediate query execution: .ToList()
+            // http://www.dotnetcurry.com/linq/750/deferred-vs-immediate-query-execution-linq
+
+            // Eager loading: .Include()
+            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
+
+            return View(customers);
+        }
+
         public ActionResult New()
         {
             var membershipTypes = _context.MembershipTypes.ToList();
@@ -29,6 +41,35 @@ namespace Vidly.Controllers
             };
 
             return View("CustomerForm", viewModel);
+        }
+
+        public ActionResult Edit(int id)
+        {
+            var customer = _context.Customers.SingleOrDefault(c => c.Id == id);
+
+            if (customer == null)
+                return HttpNotFound();
+
+            var membershipTypes = _context.MembershipTypes.ToList();
+
+            var viewModel = new CustomerFormViewModel()
+            {
+                Customer = customer,
+                MembershipTypes = membershipTypes
+            };
+
+            return View("CustomerForm", viewModel);
+        }
+
+        // GET: Customer
+        public ActionResult Details(int id)
+        {
+            var customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
+
+            if (customer == null)
+                return HttpNotFound();
+
+            return View(customer);
         }
 
         [HttpPost]
@@ -50,50 +91,5 @@ namespace Vidly.Controllers
 
             return RedirectToAction("Index", "Customers");
         }
-
-        public ActionResult Edit(int id)
-        {
-            var customer = _context.Customers.SingleOrDefault(c => c.Id == id);
-
-            if (customer == null)
-                return HttpNotFound();
-
-            var membershipTypes = _context.MembershipTypes.ToList();
-
-            var viewModel = new CustomerFormViewModel()
-            {
-                Customer = customer,
-                MembershipTypes = membershipTypes
-            };
-
-            return View("CustomerForm", viewModel);
-        }
-
-        // GET: Customers
-        public ViewResult Index()
-        {
-            // deferred vs inmediate query execution: .ToList()
-            // http://www.dotnetcurry.com/linq/750/deferred-vs-immediate-query-execution-linq
-
-            // Eager loading: .Include()
-            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
-
-            return View(customers);
-        }
-
-        // GET: Customer
-        public ActionResult Details(int id)
-        {
-            var customer = _context.Customers.Include(c => c.MembershipType).SingleOrDefault(c => c.Id == id);
-
-            if (customer == null)
-                return HttpNotFound();
-
-            return View(customer);
-        }
-
-        #region "private methods"        
-
-        #endregion
     }
 }
