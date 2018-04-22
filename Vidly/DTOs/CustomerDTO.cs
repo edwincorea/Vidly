@@ -2,9 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using Vidly.Models;
 
-namespace Vidly.DTOs
+namespace Vidly.Dtos
 {
-    public class CustomerDTO
+    public class CustomerDto
     {
         public int Id { get; set; }
 

@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
 using System.Web.Http;
-using Vidly.DTOs;
+using Vidly.Dtos;
 using Vidly.Models;
 
 namespace Vidly.Controllers.Api
@@ -21,8 +19,8 @@ namespace Vidly.Controllers.Api
         // GET /api/customers
         public IHttpActionResult GetCustomers()
         {
-            var customers = _context.Customers.ToList().Select(Mapper.Map<Customer, CustomerDTO>);
-            return Ok(customers);
+            var customerDtos = _context.Customers.ToList().Select(Mapper.Map<Customer, CustomerDto>);
+            return Ok(customerDtos);
         }
 
         // GET /api/customers/1
@@ -33,32 +31,32 @@ namespace Vidly.Controllers.Api
             if (customer == null)
                 return NotFound();
 
-            var customerDTO = Mapper.Map<Customer, CustomerDTO>(customer);
-            return Ok(customerDTO);
+            var customerDto = Mapper.Map<Customer, CustomerDto>(customer);
+            return Ok(customerDto);
         }
 
         // POST /api/customers
         [HttpPost]
-        public IHttpActionResult CreateCustomer(CustomerDTO customerDTO)
+        public IHttpActionResult CreateCustomer(CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Not a valid DTO model.");
 
-            var customer = Mapper.Map<CustomerDTO, Customer>(customerDTO);
+            var customer = Mapper.Map<CustomerDto, Customer>(customerDto);
             _context.Customers.Add(customer);
             _context.SaveChanges();
 
-            customerDTO.Id = customer.Id;
+            customerDto.Id = customer.Id;
             String uriLocation = String.Format("{0}/{1}", 
                 Request.RequestUri, 
                 customer.Id);
 
-            return Created(new Uri(uriLocation), customerDTO);
+            return Created(new Uri(uriLocation), customerDto);
         }
 
         // PUT /api/customer/1
         [HttpPut]
-        public IHttpActionResult UpdateCustomer(int id, CustomerDTO customerDTO)
+        public IHttpActionResult UpdateCustomer(int id, CustomerDto customerDto)
         {
             if (!ModelState.IsValid)
                 return BadRequest("Not a valid DTO model.");
@@ -68,7 +66,7 @@ namespace Vidly.Controllers.Api
             if (customerInDb == null)
                 return NotFound();
 
-            Mapper.Map<CustomerDTO, Customer>(customerDTO, customerInDb);
+            Mapper.Map<CustomerDto, Customer>(customerDto, customerInDb);
 
             _context.SaveChanges();
 
