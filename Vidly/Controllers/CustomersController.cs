@@ -24,13 +24,7 @@ namespace Vidly.Controllers
         // GET: Customers
         public ViewResult Index()
         {
-            // deferred vs inmediate query execution: .ToList()
-            // http://www.dotnetcurry.com/linq/750/deferred-vs-immediate-query-execution-linq
-
-            // Eager loading: .Include()
-            var customers = _context.Customers.Include(c => c.MembershipType).ToList();
-
-            return View(customers);
+            return View();
         }
 
         public ActionResult New()
