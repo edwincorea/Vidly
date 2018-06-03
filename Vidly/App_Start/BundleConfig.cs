@@ -9,8 +9,7 @@ namespace Vidly
         public static void RegisterBundles(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/lib").Include(
-                        "~/Scripts/jquery-{version}.js",
-                        "~/Content/bootstrap-theme.css",
+                        "~/Scripts/jquery-{version}.js",                        
                         "~/Scripts/bootstrap.js",
                         "~/Scripts/bootbox.js",
                         "~/Scripts/respond.js",
@@ -28,7 +27,8 @@ namespace Vidly
                         "~/Scripts/modernizr-*"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/Content/bootstrap.css",
+                "~/Content/bootstrap-lumen.css",
+                "~/Content/bootstrap-theme.css",
                 "~/Content/datatables/css/datatables.bootstrap.css",
                 "~/Content/typeahead.css",
                 "~/Content/toastr.css",
