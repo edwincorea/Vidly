@@ -23,15 +23,12 @@ textarea {
     max-width: 280px;
 }
 
-/* MVC Validation Error styling*/
-.input-validation-error {
+.field-validation-error,
+label.error {
+    color: red;
+}
+
+.input-validation-error,
+input.error {
     border: 2px solid red;
-}
-
-.field-validation-error {
-    color: red;
-}
-
-.validation-summary-errors > span {
-    color: red;
 }
